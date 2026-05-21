@@ -1,0 +1,26 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Pixi → Skia → PDF" [level=1] [ref=e3]
+    - paragraph [ref=e4]:
+      - text: Рендер
+      - code [ref=e5]: PIXI.Container
+      - text: через собственную Skia-обёртку с векторным экспортом в PDF.
+  - main [ref=e6]:
+    - generic [ref=e7]:
+      - button "Сгенерировать случайную фигуру" [ref=e8] [cursor=pointer]
+      - button "Следующая сцена" [active] [ref=e9] [cursor=pointer]
+      - button "Перерисовать Skia" [ref=e10] [cursor=pointer]
+      - button "Экспортировать в PDF" [ref=e11] [cursor=pointer]
+      - generic [ref=e12]: Готово. Двигайте мышью и нажимайте на фигуры.
+    - generic [ref=e13]:
+      - figure "PIXI Canvas (forceCanvas=true)" [ref=e14]:
+        - generic [ref=e15]: PIXI Canvas (forceCanvas=true)
+      - figure "Skia Canvas (CanvasKit-WASM)" [ref=e18]:
+        - generic [ref=e19]: Skia Canvas (CanvasKit-WASM)
+    - generic [ref=e21]:
+      - heading "События" [level=2] [ref=e22]
+      - list [ref=e23]:
+        - listitem [ref=e27]: "23:03:54 Активна сцена #2"
+        - listitem [ref=e26]: 23:03:50 Добавлена случайная фигура "rand-mpfx56tb"
+        - listitem [ref=e25]: 23:03:44 Добавлена случайная фигура "rand-mpfx51xg"
+        - listitem [ref=e24]: "23:01:51 Активна сцена #1"

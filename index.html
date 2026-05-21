@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Pixi → Skia → PDF</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Pixi → Skia → PDF</h1>
+      <p class="subtitle">
+        Рендер <code>PIXI.Container</code> через собственную Skia-обёртку
+        с векторным экспортом в PDF.
+      </p>
+    </header>
+
+    <main class="app-main">
+      <section class="controls">
+        <button id="btn-random" type="button">Сгенерировать случайную фигуру</button>
+        <button id="btn-next-scene" type="button">Следующая сцена</button>
+        <button id="btn-resync" type="button">Перерисовать Skia</button>
+        <button id="btn-export-pdf" type="button" class="primary">Экспортировать в PDF</button>
+        <span id="status" class="status">Инициализация…</span>
+      </section>
+
+      <section class="stage">
+        <figure class="canvas-wrap">
+          <figcaption>PIXI Canvas (forceCanvas=true)</figcaption>
+          <div id="pixi-host" class="canvas-host"></div>
+        </figure>
+        <figure class="canvas-wrap">
+          <figcaption>Skia Canvas (CanvasKit-WASM)</figcaption>
+          <canvas id="skia-canvas" width="600" height="600"></canvas>
+        </figure>
+      </section>
+
+      <section class="event-log">
+        <h2>События</h2>
+        <ul id="log"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
