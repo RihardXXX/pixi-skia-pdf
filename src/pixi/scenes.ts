@@ -54,7 +54,8 @@ export const buildSceneFromBrief = (): PIXI.Container => {
 /** Сцена с PIXI.Sprite — для проверки drawImage. */
 export const buildSpriteScene = async (): Promise<PIXI.Container> => {
   const mainContainer = new PIXI.Container();
-  const texture = await PIXI.Assets.load<PIXI.Texture>("/sample.png");
+  // BASE_URL уважает Vite base path — работает и локально на /, и на GitHub Pages.
+  const texture = await PIXI.Assets.load<PIXI.Texture>(`${import.meta.env.BASE_URL}sample.png`);
 
   const sprite = new PIXI.Sprite(texture);
   sprite.anchor.set(0.5);

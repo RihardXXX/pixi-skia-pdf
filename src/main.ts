@@ -83,11 +83,14 @@ const bootstrap = async (): Promise<void> => {
   const skia = new SkiaRenderer(ck, skiaCanvas, { background: [1, 1, 1, 1] });
 
   setStatus("Строим демо-сцены…");
-  const scenes: PIXI.Container[] = [
-    buildSceneFromBrief(),
-    await buildSpriteScene(),
-    buildShapesScene(),
-  ];
+  const scenes: PIXI.Container[] = [buildSceneFromBrief(), buildShapesScene()];
+  // Sprite-сцена грузит PNG — если ассет не доступен, не валим всё приложение.
+  try {
+    const sprite = await buildSpriteScene();
+    scenes.splice(1, 0, sprite);
+  } catch (error) {
+    console.warn("Не удалось загрузить sprite-сцену:", error);
+  }
 
   const state: AppState = {
     pixi,
