@@ -14,6 +14,17 @@ export default defineConfig(({ command }) => ({
     sourcemap: true,
     outDir: "dist",
     assetsInlineLimit: 0,
+    commonjsOptions: {
+      // canvaskit-wasm-pdf — UMD: `module.exports = CanvasKitInit`.
+      // По умолчанию Rollup CJS plugin не создаёт default-экспорт для таких
+      // модулей в prod-сборке (хотя Vite в dev делает interop через esbuild).
+      defaultIsModuleExports: true,
+      // file:vendor пакеты Rollup иначе обрабатывает — нужно явно включить
+      // их в commonjs-плагин и потребовать interop default-экспорта.
+      include: [/canvaskit-wasm-pdf/, /node_modules/],
+      requireReturnsDefault: "auto",
+      transformMixedEsModules: true,
+    },
   },
   // canvaskit-wasm — это UMD-модуль (module.exports = CanvasKitInit).
   // Vite сам обернёт его в ESM через optimizeDeps + esbuild interop.
