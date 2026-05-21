@@ -2,7 +2,7 @@ import type {
   CanvasKit,
   Canvas as SkCanvas,
   Paint as SkPaint,
-} from "canvaskit-wasm";
+} from "@rollerbird/canvaskit-wasm-pdf";
 import type {
   ImageSource,
   PathCommand,

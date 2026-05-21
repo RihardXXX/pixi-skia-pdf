@@ -128,14 +128,14 @@ const bootstrap = async (): Promise<void> => {
 
   $("btn-export-pdf").addEventListener("click", () => {
     try {
-      setStatus("Экспортируем PDF…");
-      exportContainerToPdf(state.current(), {
+      setStatus("Экспортируем PDF через Skia PDF backend…");
+      exportContainerToPdf(ck, state.current(), {
         width: STAGE_WIDTH,
         height: STAGE_HEIGHT,
         fileName: `pixi-skia-scene-${Date.now()}.pdf`,
         background: { r: 1, g: 1, b: 1 },
       });
-      appendLog("PDF сохранён (jsPDF, vector path)");
+      appendLog("PDF сохранён (Skia PDF backend, vector)");
       setStatus("PDF сохранён");
     } catch (error) {
       console.error(error);

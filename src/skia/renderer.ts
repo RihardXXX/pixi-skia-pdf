@@ -1,4 +1,4 @@
-import type { CanvasKit, Surface as SkSurface } from "canvaskit-wasm";
+import type { CanvasKit, Surface as SkSurface } from "@rollerbird/canvaskit-wasm-pdf";
 import * as PIXI from "pixi.js-legacy";
 import { SkiaBackend } from "../render/skia-backend";
 import { traversePixi } from "../render/traverse";
@@ -30,10 +30,16 @@ export class SkiaRenderer {
     this.height = canvas.height;
     this.background = options.background ?? [1, 1, 1, 1];
 
-    const surface = ck.MakeWebGLCanvasSurface(canvas) ?? ck.MakeSWCanvasSurface(canvas);
+    // CanvasKit-WASM с PDF backend (наш форк) собран без WebGL,
+    // поэтому используем CPU (software) рендеринг — для 600×600
+    // сцены этого с запасом хватает по производительности.
+    const surface =
+      (typeof ck.MakeWebGLCanvasSurface === "function"
+        ? ck.MakeWebGLCanvasSurface(canvas)
+        : null) ?? ck.MakeSWCanvasSurface(canvas);
     if (!surface) {
       throw new Error(
-        "Skia: не удалось создать Surface ни через WebGL, ни через CPU. Проверьте поддержку браузера.",
+        "Skia: не удалось создать Surface. Проверьте поддержку Canvas2D в браузере.",
       );
     }
     this.surface = surface;

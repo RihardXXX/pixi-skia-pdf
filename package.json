@@ -11,8 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "canvaskit-wasm": "0.39.1",
-    "jspdf": "^2.5.2",
+    "@rollerbird/canvaskit-wasm-pdf": "file:vendor/canvaskit-wasm-pdf",
     "pixi.js-legacy": "7.2.4"
   },
   "devDependencies": {

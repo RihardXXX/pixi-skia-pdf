@@ -21,8 +21,8 @@ TypeScript-приложение, которое демонстрирует:
 | Слой        | Решение                                                |
 | ----------- | ------------------------------------------------------ |
 | Pixi        | `pixi.js-legacy@7.2.4` (Canvas2D fallback, `forceCanvas=true`) |
-| Skia        | `canvaskit-wasm@0.39.1` (WebGL → SW fallback)          |
-| PDF         | `jsPDF@2.5.x` поверх того же обходчика дерева          |
+| Skia        | `@rollerbird/canvaskit-wasm-pdf@0.1.3` — CanvasKit, собранный с флагом `--enable_pdf` (SW рендеринг + PDF backend) |
+| PDF         | **Настоящий Skia PDF backend** (`CanvasKit.MakePDFDocument` / `Document.beginPage`) поверх того же обходчика дерева |
 | Сборка      | Vite 5 + TypeScript 5 (strict, no `any`)               |
 
 ## Быстрый запуск
@@ -145,26 +145,36 @@ PIXI 7 в legacy-режиме оперирует FederatedEvents (`eventMode: "s
   PIXI-канвасу. Это требование ТЗ:
   > События должны работать корректно на обоих канвасах.
 
-## Замечание про Skia PDF backend
+## Skia PDF backend
 
-ТЗ говорит:
+ТЗ требует:
 > Используя Skia PDF backend, реализовать функционал экспорта сцены в PDF файл.
 > На этом этапе понадобится скомпилировать wasm.
 
-Публичный npm-пакет `canvaskit-wasm@0.x` **не содержит PDF backend** —
-PDF-поддержка в Skia включается флагом сборки `--enable-pdf` при
-ручной компиляции CanvasKit из исходников
-(см. `skia/modules/canvaskit/compile.sh`). Полная сборка требует
-Emscripten SDK, depot_tools, checkout Skia (~5 GB) и нескольких часов
-машинного времени.
+Публичный пакет `canvaskit-wasm` в npm **не содержит** PDF backend
+(`MakePDFDocument` отсутствует в его билдe). Чтобы не тратить часы на
+самостоятельную пересборку Skia с `--enable_pdf` (требуются
+`depot_tools`, `emsdk`, checkout Skia ~5 GB), в этом проекте
+используется **готовый форк** —
+[`@rollerbird/canvaskit-wasm-pdf`](https://github.com/rollerbird/canvaskit-pdf):
+тот же CanvasKit, но **скомпилированный с PDF backend**.
+Файл `canvaskit-pdf.wasm` (≈7 MB) лежит в `vendor/canvaskit-wasm-pdf/bin/`
+и подключается через Vite `?url` import.
 
-**Решение в этом проекте.** Чтобы PDF получался «из коробки» и при
-этом был **векторным**, мы используем `jsPDF` с собственным
-backend'ом, который вызывает один и тот же обходчик `traversePixi`,
-что и Skia. Никакого `canvas.toDataURL()` или «снимка» не
-делается — каждая фигура рисуется как PDF-примитив (`rect`,
-`ellipse`-аппроксимация, `lines`). Векторный результат
-масштабируется без потерь качества и не превращается в растр.
+Экспорт в PDF в `src/pdf/exporter.ts`:
+
+```ts
+const doc = ck.MakePDFDocument({ title, creator, /* ... */ });
+const pdfCanvas = doc.beginPage(width, height);
+traversePixi(container, new SkiaBackend(ck, pdfCanvas));  // тот же обходчик!
+doc.endPage();
+const bytes = doc.close();   // Uint8Array готового PDF
+```
+
+Это **тот же `SkiaBackend`**, что рисует на экранном канвасе. Никаких
+`canvas.toDataURL()` / `html2canvas` / jsPDF / сторонних PDF-библиотек —
+байты PDF идут напрямую из движка Skia, как при использовании
+`SkPDF::MakeDocument` в нативном C++.
 
 ### Как пересобрать CanvasKit с PDF backend
 

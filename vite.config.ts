@@ -18,4 +18,9 @@ export default defineConfig(({ command }) => ({
   // canvaskit-wasm — это UMD-модуль (module.exports = CanvasKitInit).
   // Vite сам обернёт его в ESM через optimizeDeps + esbuild interop.
   // WASM-файл подтягиваем отдельно через `?url` импорт.
+  optimizeDeps: {
+    // vendor-пакеты (file:./vendor/...) Vite по умолчанию не оптимизирует,
+    // поэтому без default-экспорта рушится UMD CJS. Включаем явно.
+    include: ["@rollerbird/canvaskit-wasm-pdf"],
+  },
 }));
