@@ -1,7 +1,9 @@
 import { defineConfig } from "vite";
 
-export default defineConfig({
-  base: "./",
+// Для GitHub Pages: репо публикуется по пути /pixi-skia-pdf/.
+// В dev-сервере path всегда '/', поэтому условно поставим base только в production.
+export default defineConfig(({ command }) => ({
+  base: command === "build" ? "/pixi-skia-pdf/" : "/",
   server: {
     port: 5173,
     open: false,
@@ -16,4 +18,4 @@ export default defineConfig({
   // canvaskit-wasm — это UMD-модуль (module.exports = CanvasKitInit).
   // Vite сам обернёт его в ESM через optimizeDeps + esbuild interop.
   // WASM-файл подтягиваем отдельно через `?url` импорт.
-});
+}));

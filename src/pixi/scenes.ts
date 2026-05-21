@@ -1,4 +1,7 @@
 import * as PIXI from "pixi.js-legacy";
+// Vite сам пропустит файл через ассет-pipeline и вернёт уже корректный URL,
+// учитывающий base (важно для GitHub Pages: /pixi-skia-pdf/...).
+import sampleUrl from "../assets/sample.png?url";
 
 /**
  * Демонстрационные сцены — то самое описание из ТЗ.
@@ -54,8 +57,7 @@ export const buildSceneFromBrief = (): PIXI.Container => {
 /** Сцена с PIXI.Sprite — для проверки drawImage. */
 export const buildSpriteScene = async (): Promise<PIXI.Container> => {
   const mainContainer = new PIXI.Container();
-  // BASE_URL уважает Vite base path — работает и локально на /, и на GitHub Pages.
-  const texture = await PIXI.Assets.load<PIXI.Texture>(`${import.meta.env.BASE_URL}sample.png`);
+  const texture = await PIXI.Assets.load<PIXI.Texture>(sampleUrl);
 
   const sprite = new PIXI.Sprite(texture);
   sprite.anchor.set(0.5);
