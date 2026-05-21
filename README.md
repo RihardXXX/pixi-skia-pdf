@@ -1,5 +1,8 @@
 # Pixi → Skia → PDF
 
+> 🌐 **Live:** <https://rihardxxx.github.io/pixi-skia-pdf/>
+> 📦 **Repo:** <https://github.com/RihardXXX/pixi-skia-pdf>
+
 TypeScript-приложение, которое демонстрирует:
 
 1. Сцену на `pixi.js` (`pixi.js-legacy@7.2.4`, `forceCanvas=true`).
