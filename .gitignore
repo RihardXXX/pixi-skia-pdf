@@ -3,3 +3,9 @@ dist/
 .DS_Store
 *.log
 .vite/
+
+# local QA artifacts (screenshots, generated PDFs, recordings)
+step*.png
+.playwright-mcp/
+*.gif
+pixi-skia-scene-*.pdf
